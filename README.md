@@ -230,11 +230,12 @@ src/
 
 ## Deployment
 
-The simplest deployment target is Hugging Face Spaces with the Streamlit SDK.
+This repository is prepared for Streamlit Community Cloud.
 
 Recommended settings:
 
-- SDK: Streamlit
+- Repository: `koustubhks/mps-traffic-density-app`
+- Branch: `main`
 - App file: `app.py`
 - Python requirements: `requirements.txt`
 - Keep `models/bmd45_yolo11s_gpu_50epochs_best.pt` in the repository
