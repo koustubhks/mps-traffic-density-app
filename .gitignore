@@ -1,0 +1,39 @@
+.venv/
+.venv-gpu/
+__pycache__/
+*.py[cod]
+*.log
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Model and dataset artifacts
+*.pt
+*.onnx
+*.engine
+data/bmd45_raw*/
+data/bmd45_yolo*/
+data/bmd45_smoke*/
+runs/
+outputs_gpu/
+outputs_rtdetr/
+!models/bmd45_yolo11s_gpu_50epochs_best.pt
+
+# Streamlit local secrets should never be committed.
+.streamlit/secrets.toml
+
+# Generated app/inference output. Keep directory README files.
+outputs/**/*.png
+outputs/**/*.jpg
+outputs/**/*.jpeg
+outputs/**/*.json
+outputs/**/*.csv
+!outputs/README.md
+!outputs/sample_predictions.csv
+!outputs/sample_detection_images/.gitkeep
+!outputs/sample_detection_images/*.jpg
+!outputs/sample_detection_images/*.png
+
+# Local environment files
+.env
+.env.*

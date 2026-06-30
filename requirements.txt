@@ -1,0 +1,9 @@
+streamlit
+ultralytics
+pandas
+pillow
+numpy
+opencv-python-headless
+pyyaml
+huggingface-hub
+tqdm
