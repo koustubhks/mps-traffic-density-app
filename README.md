@@ -237,6 +237,7 @@ Recommended settings:
 - Repository: `koustubhks/mps-traffic-density-app`
 - Branch: `main`
 - App file: `app.py`
+- Python version: `3.12` from Advanced settings
 - Python requirements: `requirements.txt`
 - Keep `models/bmd45_yolo11s_gpu_50epochs_best.pt` in the repository
 - Do not upload local dataset folders, training runs, virtual environments, or raw downloaded checkpoints
