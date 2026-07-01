@@ -1,5 +1,9 @@
 # Traffic-Camera Vehicle Detection and Density Labeling
 
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://koustubh-traffic-density.streamlit.app)
+
+**Live app:** [koustubh-traffic-density.streamlit.app](https://koustubh-traffic-density.streamlit.app)
+
 This project is a Streamlit-based computer vision application for traffic-camera images. It detects vehicles, labels them by class, counts the detected vehicles, and assigns a simple traffic-density label: `unclear`, `low`, `medium`, or `high`.
 
 The main goal is to keep the pipeline practical and reproducible: prepare a small BMD-45 subset, adapt a detector, run inference, generate outputs, and provide an app that can be tested with new traffic images.
