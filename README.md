@@ -34,6 +34,8 @@ RT-DETR comparison subset:
 - 300 training images
 - 80 validation/demo images
 
+**Note on subset size:** the problem statement suggests 100-150 training images and 20-30 validation images. A local GPU was available, so the final YOLO11s run used a larger 1000/200 subset to get more stable validation metrics and to exercise the density-label logic across a wider range of vehicle counts. This is still a small fraction of the full BMD-45 dataset, and the run comfortably fit inside the two-day time budget. If GPU access is unavailable, the smaller suggested subset (100-150/20-30) works with the same pipeline and commands below, just with `--train-count` and `--val-count` set accordingly.
+
 ## Models Used
 
 Three model runs were used during development:
@@ -247,6 +249,14 @@ Recommended settings:
 - Python requirements: `requirements.txt`
 - Keep `models/bmd45_yolo11s_gpu_50epochs_best.onnx` in the repository
 - Do not upload local dataset folders, training runs, virtual environments, or raw downloaded checkpoints
+
+## Assumptions
+
+- Input images are single traffic-camera frames (not video streams); each is scored independently.
+- The default density thresholds (low: 1-5, medium: 6-12, high: >12 vehicles) are reasonable starting defaults for a single CCTV frame, not a calibrated traffic-engineering standard. They are exposed as adjustable controls in the app rather than hard-coded.
+- Test/demo images are assumed to be reasonably similar in style to BMD-45 (elevated CCTV angle, moderate resolution); performance on ground-level phone photos is expected to be weaker.
+- The ONNX-exported model is assumed sufficient for the public deployment; the PyTorch checkpoint remains the source of truth for further training or fine-tuning.
+- No lane-level or road-region information is available, so density is computed from raw vehicle count only, not from occupancy relative to visible road area.
 
 ## Limitations
 
