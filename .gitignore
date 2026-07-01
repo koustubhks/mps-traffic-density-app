@@ -18,6 +18,7 @@ runs/
 outputs_gpu/
 outputs_rtdetr/
 !models/bmd45_yolo11s_gpu_50epochs_best.pt
+!models/bmd45_yolo11s_gpu_50epochs_best.onnx
 
 # Streamlit local secrets should never be committed.
 .streamlit/secrets.toml

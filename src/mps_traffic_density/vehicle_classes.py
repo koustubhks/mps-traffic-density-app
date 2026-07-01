@@ -8,15 +8,20 @@ VEHICLE_CLASS_KEYWORDS = (
     "car",
     "cycle",
     "hmv",
+    "hatchback",
     "lcV".lower(),
     "lorry",
     "motor",
+    "muv",
     "scooter",
+    "sedan",
+    "suv",
     "three",
     "tractor",
     "truck",
     "van",
     "vehicle",
+    "wheeler",
 )
 
 NON_VEHICLE_CLASSES = {
@@ -37,4 +42,3 @@ def is_vehicle_class(class_name: str) -> bool:
 
 def normalize_class_name(class_name: str) -> str:
     return class_name.strip().replace("_", " ").replace("-", " ").lower()
-

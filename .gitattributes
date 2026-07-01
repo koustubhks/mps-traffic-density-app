@@ -1,5 +1,4 @@
 * text=auto
-packages.txt text eol=lf
 requirements.txt text eol=lf
 runtime.txt text eol=lf
 *.py text eol=lf

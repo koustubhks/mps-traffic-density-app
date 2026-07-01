@@ -44,7 +44,7 @@ YOLO11s was selected for the app because it gave the best validation performance
 
 RT-DETR-L was included as the transformer-based comparison model. It performed competitively, especially considering it was trained on a smaller subset due to local GPU memory constraints.
 
-The Streamlit app also includes a COCO-pretrained YOLO11s option. This is useful for general web or phone traffic photos, where the BMD-adapted model may miss small distant vehicles.
+When Ultralytics is installed locally, the Streamlit app also shows COCO-pretrained YOLO options. These are useful for general web or phone traffic photos, where the BMD-adapted model may miss small distant vehicles. The public Streamlit Cloud app uses the exported ONNX model for a smaller and more reliable deployment runtime.
 
 ## Local Setup
 
@@ -92,10 +92,10 @@ streamlit run app.py
 The app loads this adapted model by default:
 
 ```text
-models/bmd45_yolo11s_gpu_50epochs_best.pt
+models/bmd45_yolo11s_gpu_50epochs_best.onnx
 ```
 
-If that file is unavailable, the app falls back to a local training checkpoint or a public YOLO model.
+The ONNX model is used for Streamlit Cloud deployment because it avoids the heavier PyTorch/Ultralytics runtime and makes the public demo more reliable. The PyTorch `.pt` checkpoint is still included for local experiments and training continuation.
 
 ## Prepare the Dataset
 
@@ -204,6 +204,7 @@ data/
   README.md
   demo_images/
 models/
+  bmd45_yolo11s_gpu_50epochs_best.onnx
   bmd45_yolo11s_gpu_50epochs_best.pt
 outputs/
   sample_predictions.csv
@@ -220,6 +221,7 @@ src/
     detector.py
     density.py
     io_utils.py
+    onnx_detector.py
     prepare_bmd45_subset.py
     run_inference.py
     schema.py
@@ -239,8 +241,7 @@ Recommended settings:
 - App file: `app.py`
 - Python version: `3.12` from Advanced settings
 - Python requirements: `requirements.txt`
-- Linux packages: `packages.txt`
-- Keep `models/bmd45_yolo11s_gpu_50epochs_best.pt` in the repository
+- Keep `models/bmd45_yolo11s_gpu_50epochs_best.onnx` in the repository
 - Do not upload local dataset folders, training runs, virtual environments, or raw downloaded checkpoints
 
 ## Limitations

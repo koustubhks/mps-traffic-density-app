@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib.util
 import sys
 import tempfile
 from pathlib import Path
@@ -20,6 +21,7 @@ from mps_traffic_density.visualization import draw_prediction
 
 st.set_page_config(page_title="Traffic Signal Vehicle Detection", layout="wide")
 
+FINAL_ONNX_WEIGHTS = Path("models/bmd45_yolo11s_gpu_50epochs_best.onnx")
 FINAL_YOLO_WEIGHTS = Path("models/bmd45_yolo11s_gpu_50epochs_best.pt")
 LOCAL_YOLO_WEIGHTS = Path("runs/detect/runs/detect/bmd45_yolo11s_gpu_50epochs/weights/best.pt")
 RTDETR_WEIGHTS = Path("runs/detect/runs/detect/bmd45_rtdetr_l_gpu_20epochs_300/weights/best.pt")
@@ -31,20 +33,35 @@ def cached_model(weights: str):
 
 
 def first_available_weight() -> str:
+    for path in (FINAL_ONNX_WEIGHTS, FINAL_YOLO_WEIGHTS, LOCAL_YOLO_WEIGHTS):
+        if path.exists():
+            return str(path)
+    return "yolo11n.pt"
+
+
+def first_available_pytorch_weight() -> str:
     for path in (FINAL_YOLO_WEIGHTS, LOCAL_YOLO_WEIGHTS):
         if path.exists():
             return str(path)
     return "yolo11n.pt"
 
 
+def ultralytics_available() -> bool:
+    return importlib.util.find_spec("ultralytics") is not None
+
+
 def model_choices() -> dict[str, str]:
-    choices = {
-        "YOLO11s final GPU model": first_available_weight(),
-        "YOLO11s COCO traffic-general baseline": "yolo11s.pt",
-        "YOLO11n public baseline": "yolo11n.pt",
-    }
-    if RTDETR_WEIGHTS.exists():
-        choices["RT-DETR-L transformer comparison"] = str(RTDETR_WEIGHTS)
+    choices = {}
+    if FINAL_ONNX_WEIGHTS.exists():
+        choices["YOLO11s final model (ONNX deployment)"] = str(FINAL_ONNX_WEIGHTS)
+
+    if ultralytics_available():
+        choices["YOLO11s final model (PyTorch local)"] = first_available_pytorch_weight()
+        choices["YOLO11s COCO traffic-general baseline"] = "yolo11s.pt"
+        choices["YOLO11n public baseline"] = "yolo11n.pt"
+        if RTDETR_WEIGHTS.exists():
+            choices["RT-DETR-L transformer comparison"] = str(RTDETR_WEIGHTS)
+
     choices["Custom path"] = ""
     return choices
 
@@ -58,8 +75,8 @@ def main() -> None:
         st.header("Model")
         selected_model = st.selectbox("Detector", list(choices.keys()))
         st.caption(
-            "Use the final GPU model for BMD-45/demo images. "
-            "For Google/phone highway photos with many small vehicles, try the COCO traffic-general baseline."
+            "The ONNX deployment model is used on Streamlit Cloud. "
+            "Local Ultralytics models are shown only when the Ultralytics package is installed."
         )
         custom_weights = ""
         if selected_model == "Custom path":

@@ -11,7 +11,13 @@ from .vehicle_classes import is_vehicle_class, normalize_class_name
 
 
 def load_yolo_model(weights: str | Path = "yolo11n.pt") -> Any:
-    """Load a YOLO model lazily so non-model utilities stay lightweight."""
+    """Load a detector lazily so non-model utilities stay lightweight."""
+    weights_path = Path(weights)
+    if weights_path.suffix.lower() == ".onnx":
+        from .onnx_detector import OnnxYoloDetector
+
+        return OnnxYoloDetector(weights_path)
+
     from ultralytics import YOLO
 
     return YOLO(str(weights))
@@ -36,6 +42,14 @@ def predict_image(
         width, height = image.size
 
     yolo_model = model or load_yolo_model(weights)
+    if hasattr(yolo_model, "predict") and yolo_model.__class__.__name__ == "OnnxYoloDetector":
+        return yolo_model.predict(
+            image_path,
+            conf=conf,
+            low_max_count=low_max_count,
+            medium_max_count=medium_max_count,
+        )
+
     predict_kwargs: dict[str, Any] = {
         "source": str(image_path),
         "conf": conf,
@@ -95,4 +109,3 @@ def predict_image(
         density_label=density_label,
         density_note=density_note,
     )
-
